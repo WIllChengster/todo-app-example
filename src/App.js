@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import TodoItem from './todo-item'
+
 import './style.css'
 
 class App extends Component {
@@ -44,6 +46,7 @@ class App extends Component {
 	}
 
 	renameInput_submit = (event, item) => {
+		event.preventDefault()
 		const {todos} = this.state
 
 		for(let i = 0; i < todos.length; i++){
@@ -65,15 +68,13 @@ class App extends Component {
 		const todo_map = this.state.todos.map((item, index) => {
 			
 			return(
-				<div key={index} className="todo-item" >
-					<p> <span>{index}:</span> {item.name}</p>
-					<div>
-						<label htmlFor={`rename${index}`}>Rename: </label>
-						<input onChange={ (event) => this.renameInput_change(event, item) } value={item.rename_input} id={`rename${index}`} type="text"/>
-						<button onClick={ (event) => this.renameInput_submit(event, item) } >Confirm Rename</button>
-					</div>
-
-				</div>
+				<TodoItem 
+					key={index} 
+					item={item}
+					index={index} 
+					inputHandler = {this.renameInput_change} 
+					inputSubmit = {this.renameInput_submit}
+					/>
 			)
 		})
 
