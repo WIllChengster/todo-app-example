@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default (props) => {
+    console.log(props)
     return(
         <div className="todo-item" >
             <p> <span>{props.index}:</span> {props.item.name}</p>

@@ -16,9 +16,13 @@ class App extends Component {
 	}
 
 	handleSubmit = (event) => {
+		const new_todo = {
+			name: this.state.input,
+			rename_input: ''
+		}
 		event.preventDefault()
 		this.setState({
-			todos: [...this.state.todos, this.state.input],
+			todos: [...this.state.todos, new_todo],
 			input: ''
 		})
 	}
@@ -47,6 +51,9 @@ class App extends Component {
 
 	renameInput_submit = (event, item) => {
 		event.preventDefault()
+
+		//deconstruction es6 syntax 
+		//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 		const {todos} = this.state
 
 		for(let i = 0; i < todos.length; i++){
@@ -56,9 +63,17 @@ class App extends Component {
 			}
 		}
 
-		this.setState({
-			todos
-		})
+		//Essentially, this.setState accepts an object paramter that you usually create
+		//ie: this.setState({ foo: 'bar' })
+
+		//So what I'm doing here at a basic level is:
+		// 1. Deconstruct todos from this.state
+		// 2. Change values within my deconstructed todos object
+		// 3. Pass my todo object into setState
+
+		// NOTE: deconstruction creates an immutable copy of the object.
+
+		this.setState({todos})
 	}
 
 
@@ -67,11 +82,18 @@ class App extends Component {
 
 		const todo_map = this.state.todos.map((item, index) => {
 			
+			//I'm passing functions as a prop!
+			//You're not able to change state of any parent component.
+			//You can travel DOWN the waterfall, but not UP the waterfall
+			
+			//However, I'm passing references to this component's that
+			//are within the state's scope.
+
 			return(
 				<TodoItem 
 					key={index} 
 					item={item}
-					index={index} 
+					index={index}
 					inputHandler = {this.renameInput_change} 
 					inputSubmit = {this.renameInput_submit}
 					/>
