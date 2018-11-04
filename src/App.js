@@ -5,7 +5,10 @@ class App extends Component {
 	constructor(props){
 		super(props);
 		this.state={
-			todos: ['item1', 'item2'],
+			todos: [
+				{name: 'item2', rename_input: ''},
+				{name: 'item1', rename_input: ''}
+			],
 			input: ''
 		}
 	}
@@ -24,14 +27,52 @@ class App extends Component {
 		})
 	}
 
+	renameInput_change = (event, item) => {
+		const {todos} = this.state
+		console.log(item)
+
+		for(let i = 0; i < todos.length; i++){
+			if(todos[i] === item){
+				todos[i].rename_input = event.target.value
+			}
+		}
+
+		this.setState({
+			todos
+		})
+
+	}
+
+	renameInput_submit = (event, item) => {
+		const {todos} = this.state
+
+		for(let i = 0; i < todos.length; i++){
+			if(todos[i] === item){
+				todos[i].name = todos[i].rename_input
+				todos[i].rename_input = ''
+			}
+		}
+
+		this.setState({
+			todos
+		})
+	}
+
 
 	render() {
 		console.log(this.state)
 
 		const todo_map = this.state.todos.map((item, index) => {
+			
 			return(
 				<div key={index} className="todo-item" >
-					<p> <span>{index}:</span> {item}</p>
+					<p> <span>{index}:</span> {item.name}</p>
+					<div>
+						<label htmlFor={`rename${index}`}>Rename: </label>
+						<input onChange={ (event) => this.renameInput_change(event, item) } value={item.rename_input} id={`rename${index}`} type="text"/>
+						<button onClick={ (event) => this.renameInput_submit(event, item) } >Confirm Rename</button>
+					</div>
+
 				</div>
 			)
 		})
